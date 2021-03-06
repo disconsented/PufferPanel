@@ -246,6 +246,9 @@ func createServer(c *gin.Context) {
 
 	serverId := c.Param("id")
 	if serverId == "" {
+		serverId = c.Param("serverId")
+	}
+	if serverId == "" {
 		serverId = uuid.NewV4().String()[:8]
 	}
 
@@ -419,14 +422,14 @@ func deleteServer(c *gin.Context) {
 		return
 	}
 
-	ps := services.Permission{DB:db}
+	ps := services.Permission{DB: db}
 	newHeader, err := ps.GenerateOAuthForUser(user.ID, &server.Identifier)
 	if response.HandleError(c, err, http.StatusInternalServerError) {
 		return
 	}
 
 	headers := http.Header{}
-	headers.Add("Authorization", "Bearer " + newHeader)
+	headers.Add("Authorization", "Bearer "+newHeader)
 
 	nodeRes, err := ns.CallNode(node, "DELETE", "/daemon/server/"+server.Identifier, nil, headers)
 	if response.HandleError(c, err, http.StatusInternalServerError) {
@@ -436,7 +439,7 @@ func deleteServer(c *gin.Context) {
 	}
 
 	if nodeRes.StatusCode != http.StatusNoContent {
-		response.HandleError(c, errors.New("invalid status code response: " + nodeRes.Status), http.StatusInternalServerError)
+		response.HandleError(c, errors.New("invalid status code response: "+nodeRes.Status), http.StatusInternalServerError)
 		return
 	}
 
@@ -517,7 +520,7 @@ func editServerUser(c *gin.Context) {
 
 	email := c.Param("email")
 	username := c.Param("username")
-	if email == "" && username == ""{
+	if email == "" && username == "" {
 		return
 	}
 
