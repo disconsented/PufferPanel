@@ -3,11 +3,8 @@ package web
 import (
 	"fmt"
 	_ "github.com/alecthomas/template"
-	"github.com/gin-contrib/gzip"
 	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
-	"github.com/pufferpanel/pufferpanel/v3"
-	"github.com/pufferpanel/pufferpanel/v3/client/frontend/dist"
 	"github.com/pufferpanel/pufferpanel/v3/config"
 	"github.com/pufferpanel/pufferpanel/v3/middleware"
 	"github.com/pufferpanel/pufferpanel/v3/web/api"
@@ -20,7 +17,6 @@ import (
 	_ "github.com/swaggo/swag"
 	"io/fs"
 	"net/http"
-	"os"
 	"strings"
 )
 
@@ -114,69 +110,69 @@ func RegisterRoutes(e *gin.Engine) {
 		oauth2.RegisterRoutes(e.Group("/oauth2"))
 		auth.RegisterRoutes(e.Group("/auth"))
 
-		clientFiles = dist.ClientFiles
-		if config.WebRoot.Value() != "" {
-			clientFiles = pufferpanel.NewMergedFS(os.DirFS(config.WebRoot.Value()), clientFiles)
-		}
-
-		css := e.Group("/css")
-		{
-			css.Use(gzip.Gzip(gzip.DefaultCompression))
-			css.Use(setContentType("text/css"))
-			f, err := fs.Sub(clientFiles, "css")
-			if err != nil {
-				panic(err)
-			}
-			css.StaticFS("", http.FS(f))
-		}
-		fonts := e.Group("/fonts")
-		{
-			fonts.Use(gzip.Gzip(gzip.DefaultCompression))
-			f, err := fs.Sub(clientFiles, "fonts")
-			if err != nil {
-				panic(err)
-			}
-			fonts.StaticFS("", http.FS(f))
-		}
-		img := e.Group("/img")
-		{
-			f, err := fs.Sub(clientFiles, "img")
-			if err != nil {
-				panic(err)
-			}
-			img.StaticFS("", http.FS(f))
-		}
-		js := e.Group("/js")
-		{
-			js.Use(gzip.Gzip(gzip.DefaultCompression))
-			js.Use(setContentType("application/javascript"))
-			f, err := fs.Sub(clientFiles, "js")
-			if err != nil {
-				panic(err)
-			}
-			js.StaticFS("", http.FS(f))
-		}
-		wasm := e.Group("/wasm")
-		{
-			wasm.Use(gzip.Gzip(gzip.DefaultCompression))
-			wasm.Use(setContentType("application/wasm"))
-			f, err := fs.Sub(clientFiles, "wasm")
-			if err != nil {
-				panic(err)
-			}
-			wasm.StaticFS("", http.FS(f))
-		}
-		theme := e.Group("/theme")
-		{
-			theme.Use(setContentType("application/x-tar"))
-			f, err := fs.Sub(clientFiles, "theme")
-			if err != nil {
-				panic(err)
-			}
-			theme.StaticFS("", http.FS(f))
-		}
-		e.StaticFileFS("/favicon.png", "favicon.png", http.FS(clientFiles))
-		e.StaticFileFS("/favicon.ico", "favicon.ico", http.FS(clientFiles))
+		//clientFiles = dist.ClientFiles
+		//if config.WebRoot.Value() != "" {
+		//	clientFiles = pufferpanel.NewMergedFS(os.DirFS(config.WebRoot.Value()), clientFiles)
+		//}
+		//
+		//css := e.Group("/css")
+		//{
+		//	css.Use(gzip.Gzip(gzip.DefaultCompression))
+		//	css.Use(setContentType("text/css"))
+		//	f, err := fs.Sub(clientFiles, "css")
+		//	if err != nil {
+		//		panic(err)
+		//	}
+		//	css.StaticFS("", http.FS(f))
+		//}
+		//fonts := e.Group("/fonts")
+		//{
+		//	fonts.Use(gzip.Gzip(gzip.DefaultCompression))
+		//	f, err := fs.Sub(clientFiles, "fonts")
+		//	if err != nil {
+		//		panic(err)
+		//	}
+		//	fonts.StaticFS("", http.FS(f))
+		//}
+		//img := e.Group("/img")
+		//{
+		//	f, err := fs.Sub(clientFiles, "img")
+		//	if err != nil {
+		//		panic(err)
+		//	}
+		//	img.StaticFS("", http.FS(f))
+		//}
+		//js := e.Group("/js")
+		//{
+		//	js.Use(gzip.Gzip(gzip.DefaultCompression))
+		//	js.Use(setContentType("application/javascript"))
+		//	f, err := fs.Sub(clientFiles, "js")
+		//	if err != nil {
+		//		panic(err)
+		//	}
+		//	js.StaticFS("", http.FS(f))
+		//}
+		//wasm := e.Group("/wasm")
+		//{
+		//	wasm.Use(gzip.Gzip(gzip.DefaultCompression))
+		//	wasm.Use(setContentType("application/wasm"))
+		//	f, err := fs.Sub(clientFiles, "wasm")
+		//	if err != nil {
+		//		panic(err)
+		//	}
+		//	wasm.StaticFS("", http.FS(f))
+		//}
+		//theme := e.Group("/theme")
+		//{
+		//	theme.Use(setContentType("application/x-tar"))
+		//	f, err := fs.Sub(clientFiles, "theme")
+		//	if err != nil {
+		//		panic(err)
+		//	}
+		//	theme.StaticFS("", http.FS(f))
+		//}
+		//e.StaticFileFS("/favicon.png", "favicon.png", http.FS(clientFiles))
+		//e.StaticFileFS("/favicon.ico", "favicon.ico", http.FS(clientFiles))
 		e.NoRoute(handle404)
 	}
 }

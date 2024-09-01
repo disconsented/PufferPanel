@@ -30,6 +30,7 @@ var MasterUrl = asString("panel.settings.masterUrl", "http://localhost:8080")
 var SessionKey = asString("panel.sessionKey", "")
 var RegistrationEnabled = asBool("panel.registrationEnabled", true)
 var PrivateKey = asString("panel.token", "")
+var PluginsDir = asDataFolder("panel.pluginDir", "plugins")
 
 var DaemonEnabled = asBool("daemon.enable", true)
 var ConsoleBuffer = asInt("daemon.console.buffer", 50)

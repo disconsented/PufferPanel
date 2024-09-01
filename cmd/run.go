@@ -13,6 +13,7 @@ import (
 	"github.com/pufferpanel/pufferpanel/v3/config"
 	"github.com/pufferpanel/pufferpanel/v3/database"
 	"github.com/pufferpanel/pufferpanel/v3/logging"
+	"github.com/pufferpanel/pufferpanel/v3/plugin"
 	"github.com/pufferpanel/pufferpanel/v3/servers"
 	"github.com/pufferpanel/pufferpanel/v3/services"
 	"github.com/pufferpanel/pufferpanel/v3/sftp"
@@ -174,6 +175,11 @@ func panel() {
 
 func daemon() error {
 	sftp.Run()
+
+	if err := plugin.Load(); err != nil {
+		logging.Error.Printf("error loading plugins: %s", err.Error())
+		return err
+	}
 
 	var err error
 
