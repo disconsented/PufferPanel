@@ -1,7 +1,13 @@
 {
   "private": true,
-  "workspaces": ["api", "frontend"],
+  "workspaces": [
+    "api",
+    "frontend"
+  ],
   "scripts": {
     "build": "yarn workspaces run build"
+  },
+  "devDependencies": {
+    "@intlify/unplugin-vue-i18n": "^6.0.3"
   }
 }
